@@ -13,8 +13,9 @@ import { Subject } from './pages/Subject'
 import { Standard } from './pages/Standard'
 import { 
   Typography,
-  Container
+  Container,
 } from '@mui/material';
+import { RouterBreadcrumbs } from './components/RouterBreadcrumbs'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,23 +27,24 @@ const queryClient = new QueryClient({
 
 ReactDOM.render(
   <QueryClientProvider client={ queryClient }>
-    <Container maxWidth='xl'>
-      <BrowserRouter>
-
+    <BrowserRouter>
         <Typography variant='h3' component={Link} to='/' sx={{
           textDecoration: 'none',
           color: 'black'
         }}>
           NSN 
         </Typography>
-
+        <RouterBreadcrumbs 
+          separator='›'
+        />
+      <Container maxWidth='xl'>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/subject/:subjectIdParam' element={<Subject />} />
           <Route path='/standard/:standardParam' element={<Standard />} />
         </Routes>
-      </BrowserRouter>
-    </Container>
+      </Container>
+    </BrowserRouter>
     <ReactQueryDevtools initialIsOpen={false} />
   </QueryClientProvider>,
   document.getElementById('root')
