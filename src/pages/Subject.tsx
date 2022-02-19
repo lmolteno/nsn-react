@@ -91,12 +91,10 @@ export const Subject = () => {
     return (!subjects.data ? (<Progress />) : 
         (
         <Box>
-            <Typography>{subjects.data.find(s => s.subject_id == subjectId)?.display_name}</Typography>
-
             {!standards.data ? (<Progress />) :
             (
             <Collapse in={showing}>
-                <Paper>
+                {/* <Paper> */}
                     <TabContext value={level}>
                         <TabList sx={tabStyles} onChange={handleChange} aria-label="Level selector" variant='fullWidth'>
                             <Tab label="Level One" value="1" disabled={!standards.data[1].length}/>
@@ -113,7 +111,7 @@ export const Subject = () => {
                             <StandardsTable standards={standards.data[3]}/>
                         </TabPanel>
                     </TabContext>
-                </Paper>
+                {/* </Paper> */}
             </Collapse>
             )}
         </Box>

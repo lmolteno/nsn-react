@@ -6,16 +6,27 @@ import {
 import { StandardSummary } from './queries'
 import { colors } from './colors'
 import { Navigate, useNavigate } from 'react-router-dom'
+import { useSetPersistState } from '../hooks/persistState'
+import React from 'react'
 
 interface StandardRowProps {
     standard: StandardSummary
-    selected: number[]
-    toggleStandard: (event: React.ChangeEvent<HTMLInputElement>, sn: number) => void
+    selected: number[] 
+    setSelected: React.Dispatch<React.SetStateAction<number[]>>
 }
 
-export const StandardRow = ({ standard, selected, toggleStandard }:StandardRowProps) => {
+export const StandardRow = ({ standard, selected, setSelected }:StandardRowProps) => {
     const navigate = useNavigate();
     const toStandard = () => {navigate(`/standard/${standard.standard_number}`)};
+
+      const toggleStandard = (event: React.ChangeEvent<HTMLInputElement>, sn: number) => {
+        if (event.target.checked) {
+          setSelected([...selected, sn]);
+          return;
+        }
+        setSelected(selected.filter(n => n !== sn));
+      }
+
     return (<TableRow
         key={standard.standard_number}
         sx={{ 

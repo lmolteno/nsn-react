@@ -1,9 +1,10 @@
-import { Box, Collapse, Typography } from "@mui/material";
+import { Box, Collapse, Divider, Typography } from "@mui/material";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom"
 import { Progress } from "../components/Progress";
 import { getResources, getStandard } from "../components/queries";
+import { StandardBasicInfo } from "../components/StandardBasicInfo";
 import { StandardHeader } from "../components/StandardHeader";
 
 export const Standard = () => {
@@ -34,8 +35,11 @@ export const Standard = () => {
 
     return (
         !standard.data ? (<Progress />) :
-        (<Collapse in={showing}>
+        (<Collapse in={showing} sx={{ p: 3 }}>
             <StandardHeader standard={standard.data}/>
+            <Divider sx={{ my: 2 }}/>
+            <StandardBasicInfo standard={standard.data} />
+            <Divider sx={{ my: 2 }} />
             {!resources.data ? <Progress /> :
             <Collapse in={showingResources}>
                 <Typography>{resources.data[0].nzqa_url}</Typography>

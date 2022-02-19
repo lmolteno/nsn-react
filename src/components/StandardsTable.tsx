@@ -11,39 +11,32 @@ import {
 import { StandardSummary } from './queries'
 import { StandardRow } from './StandardRow'
 import { colors } from './colors'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { usePersistState, useSetPersistState } from '../hooks/persistState'
 
 interface StandardTableProps {
   standards: StandardSummary[]
 }
 
 export const StandardsTable = ({ standards }: StandardTableProps) => {
-  const [selected, setSelected] = useState<number[]>([]);
-  const numSelected = selected.length;
+  const [selected, setSelected] = usePersistState<number[]>('selectedStandards', []);
+  const numSelected = selected.filter(n => !!standards.find(s => s.standard_number === n)).length;
   const standardCount = standards.length;
+
+  useEffect(() => console.log(numSelected), [numSelected]);
+
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = standards.map((s) => s.standard_number);
-      setSelected(newSelected);
+      setSelected([...selected, ...standards.map(s => s.standard_number)]);
       return;
     }
-    setSelected([]);
+    setSelected(selected.filter(sn => !standards.find(s => s.standard_number === sn)));
   };
 
-  const toggleStandard = (event: React.ChangeEvent<HTMLInputElement>, sn: number) => {
-    if (event.target.checked) {
-      const newSelected = [...selected, sn];
-      setSelected(newSelected);
-      return;
-    }
-    const withoutSN = selected.filter(n => n !== sn);
-    setSelected(withoutSN);
-  }
-
   return <TableContainer>
-    <Table>
+    <Table size='small'>
       <colgroup>
-        <col width="2em" />
+        <col width='2em' />
         <col width="5em" />
         <col />
         <col width="5em" />
@@ -82,7 +75,7 @@ export const StandardsTable = ({ standards }: StandardTableProps) => {
           <StandardRow 
             standard={standard}
             selected={selected}
-            toggleStandard={toggleStandard}
+            setSelected={setSelected}
           />
         ))}
       </TableBody>

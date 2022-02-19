@@ -14,7 +14,7 @@ const baseCrumb: Crumb = {
   link: '/'
 }
 
-export const RouterBreadcrumbs = (props) => {
+export const RouterBreadcrumbs = (props: {[x: string]: any}) => {
   const location = useLocation();
   const [crumbs, setCrumbs] = useState<Crumb[]>([baseCrumb]);
   const subjects = useQuery('subjects', getSubjects);
@@ -32,9 +32,10 @@ export const RouterBreadcrumbs = (props) => {
     }
     if (location.pathname.includes('standard')) {
       const standardCrumb: Crumb = {
-        text: stub,
+        text: numStub > 90000 ? `AS${stub}` : `US${stub}`,
         link: location.pathname
       }
+      if (crumbs.at(-1)?.link?.includes('standard')) return
       setCrumbs([...crumbs, standardCrumb]);
       return
     }
@@ -49,9 +50,13 @@ export const RouterBreadcrumbs = (props) => {
         const last = idx === crumbs.length - 1;
         return <Typography 
           color='primary'
+          variant='h4'
           sx={{ 
-            textDecoration: 'none', 
-            color: last ? 'black' : 'inherit'
+            textDecoration: 'none',
+            '&:hover': {
+              textDecoration: last ? 'none' : 'underline'
+            },
+            color: last ? 'white' : 'inherit'
           }}
           {...(last ? {}
           : {

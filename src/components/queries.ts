@@ -1,6 +1,6 @@
 import { useQuery } from "react-query";
 
-interface Subject {
+export interface Subject {
     display_name: string
     name: string
     subject_id: number
@@ -58,6 +58,15 @@ export interface Standard {
     ncea_litnum: NCEACreditType
 }
 
+export interface Resource {
+    category: string
+    filepath: string
+    nzqa_url: string
+    standard_number: number
+    title: string
+    year?: number
+}
+
 const API_URL = 'https://nsn.nz/api'
 
 export const getSubjects = async () => {
@@ -101,6 +110,15 @@ export const getStandard = async (standardNumber: number) => {
     const body = await r.json();
     if (body.success) {
         return body as Standard;
+    }
+    return null
+}
+
+export const getResources = async (standardNumber: number) => {
+    const r = await fetch(`${API_URL}/resources?number=${standardNumber}`);
+    const body = await r.json();
+    if (body.success) {
+        return body.resources as Resource[]
     }
     return null
 }

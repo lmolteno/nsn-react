@@ -12,9 +12,12 @@ import { Home } from './pages/Home'
 import { Subject } from './pages/Subject'
 import { Standard } from './pages/Standard'
 import { 
-  Typography,
+  Toolbar,
   Container,
+  AppBar,
+  Paper
 } from '@mui/material';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { RouterBreadcrumbs } from './components/RouterBreadcrumbs'
 
 const queryClient = new QueryClient({
@@ -26,23 +29,28 @@ const queryClient = new QueryClient({
 });
 
 ReactDOM.render(
-  <QueryClientProvider client={ queryClient }>
+  <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-        <Typography variant='h3' component={Link} to='/' sx={{
-          textDecoration: 'none',
-          color: 'black'
-        }}>
-          NSN 
-        </Typography>
-        <RouterBreadcrumbs 
-          separator='›'
-        />
-      <Container maxWidth='xl'>
+      <AppBar position='static' sx={{mb: '3em'}}>
+        <Toolbar>
+          <RouterBreadcrumbs 
+            separator={<NavigateNextIcon sx={{ color: 'white', mb:'0.25em'}} fontSize="large" />}
+            sx={{ mb: '-0.4em' }}
+            color={"disabled"}
+          />
+        </Toolbar>
+      </AppBar>
+      <Container
+        maxWidth='xl'
+        sx={{ px: '0' }}
+      >
+        <Paper variant={'outlined'}>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/subject/:subjectIdParam' element={<Subject />} />
           <Route path='/standard/:standardParam' element={<Standard />} />
         </Routes>
+        </Paper>
       </Container>
     </BrowserRouter>
     <ReactQueryDevtools initialIsOpen={false} />
